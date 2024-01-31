@@ -27,6 +27,25 @@ const App = ({navigation}) => {
     navigation.navigate('Commands')
   }
 
+  const Test = async () => {
+
+  
+    try {
+      const url = `http://192.168.1.239:5000/postTest/`; //lokal pc ipsi
+  
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const responseData = await response.text();
+      console.log(responseData);
+    } catch (error) {
+      console.error('Error:', error.message || 'Unknown error');
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,7 +56,7 @@ const App = ({navigation}) => {
 
       <View style={styles.buttonContainer}>
 
-        <TouchableOpacity style={styles.button1} onPress={()=>null}>
+        <TouchableOpacity style={styles.button1} onPress={Test}>
           <Text style={styles.buttonText}>START</Text>
         </TouchableOpacity>
 
