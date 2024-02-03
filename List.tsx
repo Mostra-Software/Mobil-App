@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   Dimensions,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -13,6 +11,7 @@ import {
 
 const List = (navigation) => {
   const [text, setText] = useState('');
+  const [coordinates, setCoordinates] = useState('');
 
   const redLight = async () => {
     try {
@@ -41,6 +40,9 @@ const List = (navigation) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          coordinates: coordinates + ' ' + text,
+        }),
       });
 
       const responseData = await response.text();
@@ -49,7 +51,8 @@ const List = (navigation) => {
       console.error('Error:', error.message || 'Unknown error');
     }
   }
-  const sendCoordinates = async () => {
+
+  const sendCoordinates = async (buttonText) => {
     try {
       const url = `http://161.9.98.139:5000/postCoordinates/`;
 
@@ -59,7 +62,7 @@ const List = (navigation) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          coordinates: text,
+          coordinates: buttonText + ' ' + text,
         }),
       });
 
@@ -72,28 +75,35 @@ const List = (navigation) => {
 
   return (
     <SafeAreaView style={styles.container}>
-        {/* Metin girişi alanı */}
-        <TextInput
+      {/* Metin girişi alanı */}
+      <TextInput
         style={styles.input}
         placeholder="Koordinat..."
         onChangeText={(inputText) => setText(inputText)}
         value={text}
       />
-      <View style={{ height:10 }} />
-        <TouchableOpacity style={styles.sendCoordinatesButton} onPress={sendCoordinates}>
-          <Text style={styles.buttonText}>Send Coordinates</Text>
-        </TouchableOpacity>
+      <View style={{ height: 10 }} />
+      <TouchableOpacity
+        style={styles.sendCoordinatesButton}
+        onPress={() => sendCoordinates("coordinates")}
+      >
+        <Text style={styles.buttonText}>Send Coordinates</Text>
+      </TouchableOpacity>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.redLightButton} onPress={redLight}>
+        <TouchableOpacity
+          style={styles.redLightButton}
+          onPress={() => sendCoordinates("RedLight")}
+        >
           <Text style={styles.buttonText}>Red Light</Text>
         </TouchableOpacity>
         <View style={{ height: 3 }} />
-        <TouchableOpacity style={styles.greenLightButton} onPress={greenLight}>
+        <TouchableOpacity
+          style={styles.greenLightButton}
+          onPress={() => sendCoordinates("GreenLight")}
+        >
           <Text style={styles.buttonText}>Green Light</Text>
         </TouchableOpacity>
-        <View style={{ height:10 }} />
-
-
+        <View style={{ height: 10 }} />
       </View>
     </SafeAreaView>
   );
