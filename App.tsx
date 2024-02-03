@@ -27,11 +27,26 @@ const App = ({navigation}) => {
     navigation.navigate('Commands')
   }
 
-  const Test = async () => {
-
-  
+  const Start = async () => {  
     try {
-      const url = `http://192.168.1.239:5000/postTest/`; //lokal pc ipsi
+      const url = `http://161.9.98.139:5000/postStart/`; //lokal pc ipsi
+  
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const responseData = await response.text();
+      console.log(responseData);
+    } catch (error) {
+      console.error('Error:', error.message || 'Unknown error');
+    }
+  }
+  const Stop = async () => {  
+    try {
+      const url = `http://161.9.98.139:5000/postStop/`; //lokal pc ipsi
   
       const response = await fetch(url, {
         method: 'POST',
@@ -56,11 +71,11 @@ const App = ({navigation}) => {
 
       <View style={styles.buttonContainer}>
 
-        <TouchableOpacity style={styles.button1} onPress={Test}>
+        <TouchableOpacity style={styles.button1} onPress={Start}>
           <Text style={styles.buttonText}>START</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button2} onPress={()=>null}>
+        <TouchableOpacity style={styles.button2} onPress={Stop}>
           <Text style={styles.buttonText}>STOP</Text>
         </TouchableOpacity>
 
