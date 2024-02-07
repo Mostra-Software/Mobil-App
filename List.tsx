@@ -15,7 +15,7 @@ const List = (navigation) => {
 
   const redLight = async () => {
     try {
-      const url = `http://161.9.98.139:5000/postredLight/`;
+      const url = `http://10.10.24.58:5000/postredLight/`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -33,7 +33,7 @@ const List = (navigation) => {
 
   const greenLight = async () => {
     try {
-      const url = `http://161.9.98.139:5000/postgreenLight/`;
+      const url = `http://10.10.24.58:5000/postgreenLight/`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -54,38 +54,39 @@ const List = (navigation) => {
 
   const sendCoordinates = async (buttonText) => {
     try {
-      const url = `http://161.9.98.139:5000/postCoordinates/`;
+        const url = `http://10.10.24.58:5000/postCoordinates/`;
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          coordinates: buttonText + ' ' + text,
-        }),
-      });
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',  // JSON formatında veri gönderileceğini belirtin
+            },
+            body: JSON.stringify({
+                coordinates: buttonText + ' ' + text,
+            }),
+        });
 
-      const responseData = await response.text();
-      console.log(responseData);
+        const responseData = await response.text();
+        console.log(responseData);
     } catch (error) {
-      console.error('Error:', error.message || 'Unknown error');
+        console.error('Error:', error.message || 'Unknown error');
     }
-  }
+}
+
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Metin girişi alanı */}
       <TextInput
         style={styles.input}
-        placeholder="Koordinat..."
+        placeholder="Coordinate Expected"
         onChangeText={(inputText) => setText(inputText)}
         value={text}
       />
       <View style={{ height: 10 }} />
       <TouchableOpacity
         style={styles.sendCoordinatesButton}
-        onPress={() => sendCoordinates("coordinates")}
+        onPress={() => sendCoordinates("Coordinate")}
       >
         <Text style={styles.buttonText}>Send Coordinates</Text>
       </TouchableOpacity>

@@ -29,7 +29,7 @@ const App = ({navigation}) => {
 
   const Start = async () => {  
     try {
-      const url = `http://161.9.98.139:5000/postStart/`; //lokal pc ipsi
+      const url = `http://10.10.24.58:5000/postStart/`; //lokal pc ipsi
   
       const response = await fetch(url, {
         method: 'POST',
@@ -46,7 +46,7 @@ const App = ({navigation}) => {
   }
   const Stop = async () => {  
     try {
-      const url = `http://161.9.98.139:5000/postStop/`; //lokal pc ipsi
+      const url = `http://10.10.24.58:5000/postStop/`; //lokal pc ipsi
   
       const response = await fetch(url, {
         method: 'POST',
