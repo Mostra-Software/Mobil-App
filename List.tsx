@@ -15,7 +15,7 @@ const List = (navigation) => {
 
   const redLight = async () => {
     try {
-      const url = `http://10.10.24.58:5000/postredLight/`;
+      const url = `http://192.168.1.214:5000/postredLight/`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -33,7 +33,7 @@ const List = (navigation) => {
 
   const greenLight = async () => {
     try {
-      const url = `http://10.10.24.58:5000/postgreenLight/`;
+      const url = `http://192.168.1.214:5000/postgreenLight/`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -54,29 +54,27 @@ const List = (navigation) => {
 
   const sendCoordinates = async (buttonText) => {
     try {
-        const url = `http://10.10.24.58:5000/postCoordinates/`;
+      const url = `http://192.168.1.214:5000/postCoordinates/`;
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',  // JSON formatında veri gönderileceğini belirtin
-            },
-            body: JSON.stringify({
-                coordinates: buttonText + ' ' + text,
-            }),
-        });
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',  
+        },
+        body: JSON.stringify({
+          coordinates: buttonText + ' ' + text,
+        }),
+      });
 
-        const responseData = await response.text();
-        console.log(responseData);
+      const responseData = await response.text();
+      console.log(responseData);
     } catch (error) {
-        console.error('Error:', error.message || 'Unknown error');
+      console.error('Error:', error.message || 'Unknown error');
     }
-}
-
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Metin girişi alanı */}
       <TextInput
         style={styles.input}
         placeholder="Coordinate Expected"
@@ -103,6 +101,13 @@ const List = (navigation) => {
           onPress={() => sendCoordinates("GreenLight")}
         >
           <Text style={styles.buttonText}>Green Light</Text>
+        </TouchableOpacity>
+        <View style={{ height: 3 }} />
+        <TouchableOpacity
+          style={styles.yolBlokButton}
+          onPress={() => sendCoordinates("YolBlok")}
+        >
+          <Text style={styles.buttonText}>Yol Blok</Text>
         </TouchableOpacity>
         <View style={{ height: 10 }} />
       </View>
@@ -139,6 +144,13 @@ const styles = StyleSheet.create({
     height: 50,
     width: 400,
     backgroundColor: 'green',
+    borderRadius: 0,
+    justifyContent: 'center'
+  },
+  yolBlokButton: {
+    height: 50,
+    width: 400,
+    backgroundColor: 'blue',
     borderRadius: 0,
     justifyContent: 'center'
   },
