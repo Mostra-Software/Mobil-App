@@ -12,6 +12,7 @@ import {
 const List = (navigation) => {
   const [text, setText] = useState('');
   const [coordinates, setCoordinates] = useState('');
+  const [customUrl, setCustomUrl] = useState('http://192.168.1.214:5000/postCoordinates/');
 
   const redLight = async () => {
     try {
@@ -54,9 +55,7 @@ const List = (navigation) => {
 
   const sendCoordinates = async (buttonText) => {
     try {
-      const url = `http://192.168.1.214:5000/postCoordinates/`;
-
-      const response = await fetch(url, {
+      const response = await fetch(customUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',  
@@ -75,6 +74,13 @@ const List = (navigation) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Custom URL"
+        onChangeText={(inputText) => setCustomUrl(inputText)}
+        value={customUrl}
+      />
+      <View style={{ height: 10 }} />
       <TextInput
         style={styles.input}
         placeholder="Coordinate Expected"

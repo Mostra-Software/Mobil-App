@@ -1,148 +1,145 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState } from 'react';
+import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-
-
-const App = ({navigation}) => {
+const App = ({ navigation }) => {
+  const defaultStartUrl = 'http://192.168.1.236:5000/postStart/';
+  const defaultStoptUrl = 'http://192.168.1.236:5000/postStop/';
+  const [startUrl, setStartUrl] = useState(defaultStartUrl);
+  const [stopUrl, setStopUrl] = useState(defaultStoptUrl);
+  
 
   const navigateToCommandPage = () => {
-    navigation.navigate('Commands')
-  }
+    navigation.navigate('Commands');
+  };
 
-  const Start = async () => {  
+  const handleStart = async () => {
     try {
-      const url = `http://192.168.1.214:5000/postStart/`; //lokal pc ipsi
-  
-      const response = await fetch(url, {
+      const response = await fetch(startUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
       const responseData = await response.text();
       console.log(responseData);
     } catch (error) {
       console.error('Error:', error.message || 'Unknown error');
     }
-  }
-  const Stop = async () => {  
+  };
+
+  const handleStop = async () => {
     try {
-      const url = `http://192.168.1.214:5000/postStop/`; //lokal pc ipsi
-  
-      const response = await fetch(url, {
+      const response = await fetch(stopUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+
       const responseData = await response.text();
       console.log(responseData);
     } catch (error) {
       console.error('Error:', error.message || 'Unknown error');
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.cameraContainer}>
-        <Text style={{alignSelf:'center'}}>Camera</Text>
+        <Text style={{ alignSelf: 'center' }}>Camera</Text>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Start URL"
+          onChangeText={setStartUrl}
+          value={startUrl}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Stop URL"
+          onChangeText={setStopUrl}
+          value={stopUrl}
+        />
       </View>
 
       <View style={styles.buttonContainer}>
-
-        <TouchableOpacity style={styles.button1} onPress={Start}>
+        <TouchableOpacity style={styles.button1} onPress={handleStart}>
           <Text style={styles.buttonText}>START</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button2} onPress={Stop}>
+        <TouchableOpacity style={styles.button2} onPress={handleStop}>
           <Text style={styles.buttonText}>STOP</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button3} onPress={navigateToCommandPage}>
           <Text style={styles.buttonText}>CMND LIST</Text>
         </TouchableOpacity>
-
-
-
-
       </View>
-      
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'white',
-    flex:1
+    backgroundColor: 'white',
+    flex: 1,
   },
-  cameraContainer:{
-    backgroundColor:'lightgray',
-    width: Dimensions.get('screen').width/1.2,
-    height: Dimensions.get('screen').height/2,
-    alignSelf:'center',
-    marginTop:30,
-    borderRadius:30,
-    justifyContent:'center',
-    borderWidth:2
+  cameraContainer: {
+    backgroundColor: 'lightgray',
+    width: Dimensions.get('screen').width / 1.2,
+    height: Dimensions.get('screen').height / 10,
+    alignSelf: 'center',
+    marginTop: 10,
+    borderRadius: 30,
+    justifyContent: 'center',
+    borderWidth: 2,
   },
-  buttonContainer:{
-    marginTop:80,
-    flexDirection:'row',
-    justifyContent:'space-evenly'
+  inputContainer: {
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
-
-  button1:{
-     height:80,
-     width:80,
-     backgroundColor:'green',
-     borderRadius:10,
-     justifyContent:'center'
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
-
-  button2:{
-    height:80,
-    width:80,
-    backgroundColor:'red',
-    borderRadius:10,
-    justifyContent:'center',
+  buttonContainer: {
+    marginTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
-
-  button3:{
-    height:80,
-    width:80,
-    backgroundColor:'black',
-    borderRadius:10,
-    justifyContent:'center'
+  button1: {
+    height: 80,
+    width: 80,
+    backgroundColor: 'green',
+    borderRadius: 10,
+    justifyContent: 'center',
   },
-
-  buttonText:{
-    color:'white',
-    textAlign:'center',
-    fontWeight:'bold',
-  }
-  
+  button2: {
+    height: 80,
+    width: 80,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  button3: {
+    height: 80,
+    width: 80,
+    backgroundColor: 'black',
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
 });
 
 export default App;
