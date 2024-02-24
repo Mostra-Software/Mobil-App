@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, TextInput, View } from 'react-native';
+import * as WebSockets from 'react-native-websocket';
+
 
 const App = ({ navigation }) => {
-  const defaultStartUrl = 'http://192.168.1.236:5000/postStart/';
-  const defaultStoptUrl = 'http://192.168.1.236:5000/postStop/';
+
+  const defaultStartUrl = 'http://10.10.24.123:5000/postStart/';
+  const defaultStoptUrl = 'http://10.10.24.123:5000/postStop/';
   const [startUrl, setStartUrl] = useState(defaultStartUrl);
   const [stopUrl, setStopUrl] = useState(defaultStoptUrl);
+
   
 
   const navigateToCommandPage = () => {
     navigation.navigate('Commands');
   };
-
+/* 
   const handleStart = async () => {
     try {
+      
       const response = await fetch(startUrl, {
         method: 'POST',
         headers: {
@@ -26,9 +31,9 @@ const App = ({ navigation }) => {
     } catch (error) {
       console.error('Error:', error.message || 'Unknown error');
     }
-  };
-
-  const handleStop = async () => {
+  }; 
+  
+    const handleStop = async () => {
     try {
       const response = await fetch(stopUrl, {
         method: 'POST',
@@ -43,6 +48,60 @@ const App = ({ navigation }) => {
       console.error('Error:', error.message || 'Unknown error');
     }
   };
+  
+  */
+ 
+  const [socket, setSocket] = useState(null);
+
+  const startUrl2 = 'wss://whale-app-pnnfr.ondigitalocean.app/';
+
+  const handleStart = async () => {
+    try {
+      const newSocket = new WebSocket(startUrl2);
+      newSocket.onopen = () => {
+        console.log('WebSocket bağlantısı kuruldu:', startUrl2);
+        sendMessage(newSocket, 'start');
+      };
+
+      newSocket.onerror = (error) => {
+        console.error('WebSocket hatası:', error);
+      };
+
+      setSocket(newSocket);
+    } catch (error) {
+      console.error('Error:', error.message || 'Unknown error');
+    }
+  };
+  const handleStop = async () => {
+    try {
+      const newSocket = new WebSocket(startUrl2);
+      newSocket.onopen = () => {
+        console.log('WebSocket bağlantısı kuruldu:', startUrl2);
+        sendMessage(newSocket, 'stop');
+      };
+
+      newSocket.onerror = (error) => {
+        console.error('WebSocket hatası:', error);
+      };
+
+      setSocket(newSocket);
+    } catch (error) {
+      console.error('Error:', error.message || 'Unknown error');
+    }
+  };
+
+
+
+  const sendMessage = (socket, message) => {
+    if (socket.readyState === WebSocket.OPEN) {
+      const messageObj = { message: message };
+      const jsonMessage = JSON.stringify(messageObj);
+      socket.send(jsonMessage);
+      console.log('Mesaj gönderildi:', jsonMessage);
+    } else {
+      console.error('WebSocket bağlantısı henüz açılmadı.');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,18 +110,20 @@ const App = ({ navigation }) => {
       </View>
 
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
+{/*         <TextInput
+          style={[styles.input, { color: 'black' }]}
           placeholder="Enter Start URL"
+          placeholderTextColor="black"
           onChangeText={setStartUrl}
           value={startUrl}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, { color: 'black' }]}
           placeholder="Enter Stop URL"
+          placeholderTextColor="black"
           onChangeText={setStopUrl}
           value={stopUrl}
-        />
+        /> */}
       </View>
 
       <View style={styles.buttonContainer}>
@@ -90,7 +151,7 @@ const styles = StyleSheet.create({
   cameraContainer: {
     backgroundColor: 'lightgray',
     width: Dimensions.get('screen').width / 1.2,
-    height: Dimensions.get('screen').height / 10,
+    height: Dimensions.get('screen').height / 2,
     alignSelf: 'center',
     marginTop: 10,
     borderRadius: 30,
